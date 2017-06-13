@@ -1,0 +1,60 @@
+CRUD
+Create, read, update, Delete
+Create:
+insertOne()
+All docs in MongoDB contain '_id' which is ObjectId; a unique indentifier for each item. Can be furnished by us as well
+insertMany([{...supply}, {the list of multiple items}, {to be added...}]). Does an ordered insert. Stops when encounters error
+insertMany([{...supply}, {the list of multiple items}, {to be added...}],{"ordered":false}). Does an unordered insert. Continues even if error encountered and finishes all inserts. Displays list of all errors at end.
+"Upserts": Update commands that find no match for value being matched.
+
+-----
+Object Id :
+Date|MAC Addr|PID|Counter
+----|---|--|---
+12-byte Hex string
+---
+
+Cursors & Projections
+_id always included unless specifically excluded
+Projections when need to limit fields returned
+
+###Inclusions and exclusions cannot be batched together: except _id exclusion with inclusions
+
+----
+'Logical and' is used where we need to specify mutiple criteria on same field
+
+----
+
+
+$setOnInsert 	
+Sets value of field id update results in insert of ducment.
+..operations that modify existing docs
+
+$set Sets value of field in document
+
+$unset
+Removes specified field from documnet
+
+$in
+only updates field if specified value is lessthan existing field value
+----
+Skip, Limit, Sort
+2	,3,	1
+Order unimportant:
+Sort done first. Skip next. Limit next.
+-----
+
+the commands in the shell are similar to PyMongo, except for sorting, where you have to specify a list of (key, direction) pairs if sorting by multiple fields in PyMongo.
+
+Please refer to these doc pages:
+
+https://docs.mongodb.com/manual/reference/delete-methods/
+
+https://docs.mongodb.com/manual/reference/method/cursor.sort/
+
+https://docs.mongodb.com/manual/reference/method/cursor.skip/
+
+https://docs.mongodb.com/manual/reference/method/cursor.limit/
+
+---
+

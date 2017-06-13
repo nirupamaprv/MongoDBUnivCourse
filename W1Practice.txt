@@ -1,0 +1,442 @@
+Last login: Wed Jun  7 15:38:55 on ttys000
+SriramRanganathan ~ $ mongo
+MongoDB shell version: 3.0.5
+connecting to: test
+Server has startup warnings: 
+2017-06-07T16:08:05.776-0500 I CONTROL  [initandlisten] 
+2017-06-07T16:08:05.776-0500 I CONTROL  [initandlisten] ** WARNING: soft rlimits too low. Number of files is 256, should be at least 1000
+> help
+	db.help()                    help on db methods
+	db.mycoll.help()             help on collection methods
+	sh.help()                    sharding helpers
+	rs.help()                    replica set helpers
+	help admin                   administrative help
+	help connect                 connecting to a db help
+	help keys                    key shortcuts
+	help misc                    misc things to know
+	help mr                      mapreduce
+
+	show dbs                     show database names
+	show collections             show collections in current database
+	show users                   show users in current database
+	show profile                 show most recent system.profile entries with time >= 1ms
+	show logs                    show the accessible logger names
+	show log [name]              prints out the last segment of log in memory, 'global' is default
+	use <db_name>                set current database
+	db.foo.find()                list objects in collection foo
+	db.foo.find( { a : 1 } )     list objects in foo where a == 1
+	it                           result of the last line evaluated; use to further iterate
+	DBQuery.shellBatchSize = x   set default number of items to display on shell
+	exit                         quit the mongo shell
+> show dbs
+blog      0.078GB
+local     0.078GB
+m101      0.078GB
+students  0.078GB
+test      0.078GB
+> use video
+switched to db video
+> db.movies.insertOne({"title":"Jaws", "year":1975,"imdb":"tt0073195"})
+2017-06-07T16:11:16.551-0500 E QUERY    TypeError: Property 'insertOne' of object video.movies is not a function
+    at (shell):1:11
+> db.movies.insert({"title":"Jab We Met", "year":2010})
+WriteResult({ "nInserted" : 1 })
+> db.movies.insert({"title":"Jaws", "year":1975,"imdb":"tt0073195"})
+WriteResult({ "nInserted" : 1 })
+> db.movies.find()
+{ "_id" : ObjectId("59386c3a29c9c1fef2700740"), "title" : "Jab We Met", "year" : 2010 }
+{ "_id" : ObjectId("59386c5129c9c1fef2700741"), "title" : "Jaws", "year" : 1975, "imdb" : "tt0073195" }
+> db.movies.insertMany({"title":"Bajirao Mastani", "year":2015}, {"title":"R..Rajkumar", "year":2013})
+2017-06-07T16:16:10.425-0500 E QUERY    TypeError: Property 'insertMany' of object video.movies is not a function
+    at (shell):1:11
+> db.movies.insert({"title":"Bajirao Mastani", "year":2015})
+WriteResult({ "nInserted" : 1 })
+> db.movies.insert({"title":"Baahubali2", "year":2017})
+WriteResult({ "nInserted" : 1 })
+> db.movies.find()
+{ "_id" : ObjectId("59386c3a29c9c1fef2700740"), "title" : "Jab We Met", "year" : 2010 }
+{ "_id" : ObjectId("59386c5129c9c1fef2700741"), "title" : "Jaws", "year" : 1975, "imdb" : "tt0073195" }
+{ "_id" : ObjectId("59386d3b29c9c1fef2700742"), "title" : "Bajirao Mastani", "year" : 2015 }
+{ "_id" : ObjectId("59386d5a29c9c1fef2700743"), "title" : "Baahubali2", "year" : 2017 }
+> db.movies.find().pretty()
+{
+	"_id" : ObjectId("59386c3a29c9c1fef2700740"),
+	"title" : "Jab We Met",
+	"year" : 2010
+}
+{
+	"_id" : ObjectId("59386c5129c9c1fef2700741"),
+	"title" : "Jaws",
+	"year" : 1975,
+	"imdb" : "tt0073195"
+}
+{
+	"_id" : ObjectId("59386d3b29c9c1fef2700742"),
+	"title" : "Bajirao Mastani",
+	"year" : 2015
+}
+{
+	"_id" : ObjectId("59386d5a29c9c1fef2700743"),
+	"title" : "Baahubali2",
+	"year" : 2017
+}
+> db,movies.find({"year":2017}).pretty()
+2017-06-07T16:19:57.414-0500 E QUERY    ReferenceError: movies is not defined
+    at (shell):1:4
+> db.movies.find({"year":2017}).pretty()
+{
+	"_id" : ObjectId("59386d5a29c9c1fef2700743"),
+	"title" : "Baahubali2",
+	"year" : 2017
+}
+> var q = db.movies.find()
+> q.hasNext()
+true
+> q.hasNext()
+true
+> q.next()
+{
+	"_id" : ObjectId("59386c3a29c9c1fef2700740"),
+	"title" : "Jab We Met",
+	"year" : 2010
+}
+> q.next()
+{
+	"_id" : ObjectId("59386c5129c9c1fef2700741"),
+	"title" : "Jaws",
+	"year" : 1975,
+	"imdb" : "tt0073195"
+}
+> q.next()
+{
+	"_id" : ObjectId("59386d3b29c9c1fef2700742"),
+	"title" : "Bajirao Mastani",
+	"year" : 2015
+}
+> q.next()
+{
+	"_id" : ObjectId("59386d5a29c9c1fef2700743"),
+	"title" : "Baahubali2",
+	"year" : 2017
+}
+> q.next()
+2017-06-07T16:22:23.836-0500 E QUERY    Error: error hasNext: false
+    at Error (<anonymous>)
+    at DBQuery.next (src/mongo/shell/query.js:255:15)
+    at (shell):1:3 at src/mongo/shell/query.js:255
+> 
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+Last login: Wed Jun  7 16:46:41 on ttys001
+SriramRanganathan ~ $ mongo
+MongoDB shell version v3.4.4
+connecting to: mongodb://127.0.0.1:27017
+MongoDB server version: 3.4.4
+Server has startup warnings: 
+2017-06-07T16:46:05.333-0500 I CONTROL  [initandlisten] 
+2017-06-07T16:46:05.333-0500 I CONTROL  [initandlisten] ** WARNING: Access control is not enabled for the database.
+2017-06-07T16:46:05.333-0500 I CONTROL  [initandlisten] **          Read and write access to data and configuration is unrestricted.
+2017-06-07T16:46:05.333-0500 I CONTROL  [initandlisten] 
+2017-06-07T16:46:05.333-0500 I CONTROL  [initandlisten] 
+2017-06-07T16:46:05.334-0500 I CONTROL  [initandlisten] ** WARNING: soft rlimits too low. Number of files is 256, should be at least 1000
+> show dbs
+blog      0.078GB
+local     0.078GB
+m101      0.078GB
+students  0.078GB
+test      0.078GB
+video     0.078GB
+> use video
+switched to db video
+> db.movies.insert({"title":"English Vinglish", "year": 2013})
+WriteResult({ "nInserted" : 1 })
+> db.movies.insertOne({"title":"Hindi Medium", "year": 2017})
+{
+	"acknowledged" : true,
+	"insertedId" : ObjectId("593874b8b05282fb643e2a8e")
+}
+> db.movies.insertMany({"title":"Dilwale", "year": 2015}, {"title":"Baahubali". "year":2015})
+2017-06-07T16:50:38.565-0500 E QUERY    [thread1] SyntaxError: missing name after . operator @(shell):1:78
+> db.movies.insertMany({"title":"Dilwale", "year": 2015}, {"title":"Baahubali", "year":2015})
+2017-06-07T16:50:58.643-0500 E QUERY    [thread1] TypeError: documents.map is not a function :
+DBCollection.prototype.insertMany@src/mongo/shell/crud_api.js:283:1
+@(shell):1:1
+> db.movies.find("year":2013).pretty()
+2017-06-07T16:51:38.174-0500 E QUERY    [thread1] SyntaxError: missing ) after argument list @(shell):1:21
+> db.movies.find({"year":2013}).pretty()
+{
+	"_id" : ObjectId("59387496b05282fb643e2a8d"),
+	"title" : "English Vinglish",
+	"year" : 2013
+}
+> db.movies.find().pretty()
+{
+	"_id" : ObjectId("59386c3a29c9c1fef2700740"),
+	"title" : "Jab We Met",
+	"year" : 2010
+}
+{
+	"_id" : ObjectId("59386c5129c9c1fef2700741"),
+	"title" : "Jaws",
+	"year" : 1975,
+	"imdb" : "tt0073195"
+}
+{
+	"_id" : ObjectId("59386d3b29c9c1fef2700742"),
+	"title" : "Bajirao Mastani",
+	"year" : 2015
+}
+{
+	"_id" : ObjectId("59386d5a29c9c1fef2700743"),
+	"title" : "Baahubali2",
+	"year" : 2017
+}
+{
+	"_id" : ObjectId("59387496b05282fb643e2a8d"),
+	"title" : "English Vinglish",
+	"year" : 2013
+}
+{
+	"_id" : ObjectId("593874b8b05282fb643e2a8e"),
+	"title" : "Hindi Medium",
+	"year" : 2017
+}
+> db.movies.find({"year":2017}).pretty()
+{
+	"_id" : ObjectId("59386d5a29c9c1fef2700743"),
+	"title" : "Baahubali2",
+	"year" : 2017
+}
+{
+	"_id" : ObjectId("593874b8b05282fb643e2a8e"),
+	"title" : "Hindi Medium",
+	"year" : 2017
+}
+> 
+
+-------------------------
+Last login: Thu Jun  8 10:40:25 on ttys000
+SriramRanganathan ~ $ sudo bash
+Password:
+bash: __git_ps1: command not found
+root ~ $ pip install bottle
+The directory '/Users/SriramRanganathan/Library/Caches/pip/http' or its parent directory is not owned by the current user and the cache has been disabled. Please check the permissions and owner of that directory. If executing pip with sudo, you may want sudo's -H flag.
+The directory '/Users/SriramRanganathan/Library/Caches/pip' or its parent directory is not owned by the current user and caching wheels has been disabled. check the permissions and owner of that directory. If executing pip with sudo, you may want sudo's -H flag.
+Requirement already satisfied: bottle in ./anaconda/lib/python3.6/site-packages
+bash: __git_ps1: command not found
+root ~ $ exit
+exit
+SriramRanganathan ~ $ cd Downloads
+SriramRanganathan Downloads $ ls
+2016TurboTaxReturn.pdf
+2017-18 OE Guide FINAL_03082017.pdf
+42023318_IdCard.pdf
+ATT_232027108632_20170428.pdf
+AlexaZipf.xlsx
+BillImage (1).pdf
+BillImage.pdf
+ConfirmationStatement.pdf
+JSON
+JSON_568c43bed8ca390830d6eb31.a18568ab6fad.zip
+OpTransactionHistory08-05-2017.xls
+PatriotAmericaPlus-2016.pdf
+Statement_02_14_2017-2.PDF
+Statement_02_14_2017.PDF
+Statement_03_14_2017.PDF
+URX Discount Card.pdf
+USDA.csv
+Users
+VisaLetter.pdf
+WHO.csv
+XML_Wrangling.ipynb
+autos.csv.zip
+beatles-1.xls
+cities.csv.zip
+education-statistics.zip
+education-statistics.zip.cpgz
+intro_to_creating_and_reading_documents
+intro_to_creating_and_reading_documents_568c454cd8ca390830d6eb56.58fa2fa314b5.zip
+mongodb-3.2
+mongodb-osx-ssl-x86_64-3.2.13-2.tar
+mongodb-osx-ssl-x86_64-3.2.13.tar
+mongodb-osx-x86_64-3.2.13
+shipping-label.pdf
+slingtv (1).dmg
+slingtv.dmg
+test.csv
+SriramRanganathan Downloads $ ls
+2016TurboTaxReturn.pdf
+2017-18 OE Guide FINAL_03082017.pdf
+42023318_IdCard.pdf
+ATT_232027108632_20170428.pdf
+AlexaZipf.xlsx
+BillImage (1).pdf
+BillImage.pdf
+ConfirmationStatement.pdf
+JSON
+JSON_568c43bed8ca390830d6eb31.a18568ab6fad.zip
+OpTransactionHistory08-05-2017.xls
+PatriotAmericaPlus-2016.pdf
+Statement_02_14_2017-2.PDF
+Statement_02_14_2017.PDF
+Statement_03_14_2017.PDF
+URX Discount Card.pdf
+USDA.csv
+Users
+VisaLetter.pdf
+WHO.csv
+XML_Wrangling.ipynb
+autos.csv.zip
+beatles-1.xls
+cities.csv.zip
+education-statistics.zip
+education-statistics.zip.cpgz
+intro_to_creating_and_reading_documents
+intro_to_creating_and_reading_documents_568c454cd8ca390830d6eb56.58fa2fa314b5.zip
+mongodb-3.2
+mongodb-osx-ssl-x86_64-3.2.13-2.tar
+mongodb-osx-ssl-x86_64-3.2.13.tar
+mongodb-osx-x86_64-3.2.13
+shipping-label.pdf
+slingtv (1).dmg
+slingtv.dmg
+test.csv
+SriramRanganathan Downloads $ cd ..
+SriramRanganathan ~ $ cd Documents/nimmu
+SriramRanganathan nimmu $ cd MongoDBUniv
+SriramRanganathan MongoDBUniv $ ls
+JSON
+JSON_568c43bed8ca390830d6eb31.a18568ab6fad.zip
+TerminalSavedOutput.txt
+W1Hw1.png
+W1Hw1Soln.txt
+W1Hw1_Q1Ans.txt
+W1Practice.txt
+W1_Hw1_q2.txt
+W1_Hw2_Trial.txt
+Week1.txt
+Week2.txt
+dump
+dump 2
+hello_bottle__m101.py
+hw1-1__m101.zip
+hw1-1__m101j_m101p_5258458de2d4233537765336.83da8434eb27.zip
+hw1-2.0f4155dff396.py
+hw1-3.py
+intro_to_creating_and_reading_documents
+intro_to_creating_and_reading_documents_568c454cd8ca390830d6eb56.58fa2fa314b5.zip
+mongodb-osx-ssl-x86_64-3.2.13.tar
+mongodb-osx-x86_64-3.2.13
+pymongo_getting_started__m101p.py
+venv
+SriramRanganathan MongoDBUniv $ python hello_bottle__m101.py
+Bottle v0.12.13 server starting up (using WSGIRefServer())...
+Listening on http://localhost:8080/
+Hit Ctrl-C to quit.
+
+127.0.0.1 - - [08/Jun/2017 10:50:39] "GET / HTTP/1.1" 404 720
+127.0.0.1 - - [08/Jun/2017 10:50:39] "GET /favicon.ico HTTP/1.1" 404 742
+127.0.0.1 - - [08/Jun/2017 10:51:15] "GET / HTTP/1.1" 404 720
+127.0.0.1 - - [08/Jun/2017 10:51:19] "GET / HTTP/1.1" 404 720
+127.0.0.1 - - [08/Jun/2017 10:51:29] "GET /hello HTTP/1.1" 404 730
+127.0.0.1 - - [08/Jun/2017 10:51:56] "GET /hello/Andrew HTTP/1.1" 200 20
+127.0.0.1 - - [08/Jun/2017 10:52:04] "GET /hello/Andrew HTTP/1.1" 200 20
+127.0.0.1 - - [08/Jun/2017 10:52:07] "GET /hello/nirupama HTTP/1.1" 200 22
+
+
+exit
+
+----------
+Last login: Thu Jun  8 11:16:45 on ttys001
+SriramRanganathan ~ $ cd Documents/nimmu
+SriramRanganathan nimmu $ cd MongoDBUniv
+SriramRanganathan MongoDBUniv $ ls
+#pymongo_getting_started__m101.py#
+JSON
+JSON_568c43bed8ca390830d6eb31.a18568ab6fad.zip
+TerminalSavedOutput.txt
+W1Hw1.png
+W1Hw1Soln.txt
+W1Hw1_Q1Ans.txt
+W1Practice.txt
+W1_Hw1_q2.txt
+W1_Hw2_Trial.txt
+Week1.txt
+Week2.txt
+dump
+dump 2
+hello_bottle__m101.py
+hw1-1__m101.zip
+hw1-1__m101j_m101p_5258458de2d4233537765336.83da8434eb27.zip
+hw1-2.0f4155dff396.py
+hw1-3.py
+intro_to_creating_and_reading_documents
+intro_to_creating_and_reading_documents_568c454cd8ca390830d6eb56.58fa2fa314b5.zip
+mongodb-osx-ssl-x86_64-3.2.13.tar
+mongodb-osx-x86_64-3.2.13
+pymongo_getting_started__m101.py
+pymongo_getting_started__m101p.py
+venv
+SriramRanganathan MongoDBUniv $ show dbs
+-bash: show: command not found
+SriramRanganathan MongoDBUniv $ mongo
+MongoDB shell version v3.4.4
+connecting to: mongodb://127.0.0.1:27017
+MongoDB server version: 3.4.4
+Server has startup warnings: 
+2017-06-07T16:46:05.333-0500 I CONTROL  [initandlisten] 
+2017-06-07T16:46:05.333-0500 I CONTROL  [initandlisten] ** WARNING: Access control is not enabled for the database.
+2017-06-07T16:46:05.333-0500 I CONTROL  [initandlisten] **          Read and write access to data and configuration is unrestricted.
+2017-06-07T16:46:05.333-0500 I CONTROL  [initandlisten] 
+2017-06-07T16:46:05.333-0500 I CONTROL  [initandlisten] 
+2017-06-07T16:46:05.334-0500 I CONTROL  [initandlisten] ** WARNING: soft rlimits too low. Number of files is 256, should be at least 1000
+> show dbs
+blog      0.078GB
+local     0.078GB
+m101      0.078GB
+students  0.078GB
+test      0.078GB
+video     0.078GB
+> use test
+switched to db test
+> mongod
+2017-06-08T11:19:55.244-0500 E QUERY    [thread1] ReferenceError: mongod is not defined :
+@(shell):1:1
+> mongo
+2017-06-08T11:20:00.606-0500 E QUERY    [thread1] ReferenceError: mongo is not defined :
+@(shell):1:1
+> show dbs
+blog      0.078GB
+local     0.078GB
+m101      0.078GB
+students  0.078GB
+test      0.078GB
+video     0.078GB
+> use m101
+switched to db m101
+> show collection
+2017-06-08T11:21:29.561-0500 E QUERY    [thread1] Error: don't know how to show [collection] :
+shellHelper.show@src/mongo/shell/utils.js:906:11
+shellHelper@src/mongo/shell/utils.js:659:15
+@(shellhelp2):1:1
+> show collections
+funnynumbers
+hw1
+system.indexes
+> use test
+switched to db test
+> show collections
+names
+system.indexes
+users
+> db.names.find().pretty()
+{
+	"_id" : ObjectId("55c3ff0cc96f69666ac65cc7"),
+	"firstName" : "Sriram Ranganathan"
+}
+{ "_id" : ObjectId("5935bf167507c8a6147de515"), "name" : "Nirupama" }
+{ "_id" : ObjectId("5935c89134f26822bea53068"), "name" : "codenex" }
+> 
+------------

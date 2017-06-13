@@ -1,0 +1,8 @@
+Week1
+www.json.org
+http://bsonspec.org
+
+
+--
+mongodb-osx-x86_64-3.2.13 2
+---
